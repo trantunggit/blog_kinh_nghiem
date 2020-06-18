@@ -15,7 +15,7 @@ class userController extends Controller
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8|max:32',
-            'role_id' => 'required|numeric',
+            // 'role_id' => 'required|numeric',
         ]);
         if ($validator->fails()) {
             return response()->json($validator->errors(), 403);
@@ -24,7 +24,7 @@ class userController extends Controller
         $user->email = $request->email;
         $user->password = $request->password;
         $user->name = $request->name;
-        $user->role_id = $request->role_id;
+        // $user->role_id = $request->role_id;
         $user->api_token = hash_hmac('sha256', Str::random(64), config('app.key'));
         $user->save();
         return response()->json(['description' => 'Created'], 200);
