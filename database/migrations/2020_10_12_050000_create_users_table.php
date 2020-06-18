@@ -18,8 +18,6 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('name');
-            $table->unsignedInteger('role_id')->nullable();
-            $table->foreign('role_id')->references('id')->on('roles')->onDelete('SET NULL');
             $table->string('api_token');
             $table->timestamps();
         });
