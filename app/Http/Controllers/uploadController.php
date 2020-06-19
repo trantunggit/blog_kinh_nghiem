@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\assets;
 use Validator;
 use Carbon\Carbon;
-
+use File;
 define('RESPONSE_STATUS_FORBIDDEN', 403);
 define('RESPONSE_STATUS_OK', 200);
 
@@ -18,7 +18,6 @@ class uploadController extends Controller
         $curr = new Carbon();
         $file = $request->file('image');
         $filename = date('Y-m-d_hia')."_".$file->getClientOriginalName();
-        dd($filename);
         $file->move('uploads/images', $filename);
         $image = new assets;
         $image->name = $filename;
@@ -58,4 +57,13 @@ class uploadController extends Controller
         }
         return response()->json(['description' => 'errors'], RESPONSE_STATUS_FORBIDDEN);
     }
+    //20
+    function deleteAsset(Request $request){
+        $id = $request->id;
+        $asset = assets::where('id', $id)->first();
+        File::delete($asset->location);
+        assets::where('id', $id)->delete();
+        return response()->json("delete succcess", 200);
+    }
+
 }

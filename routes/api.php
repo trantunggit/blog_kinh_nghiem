@@ -81,9 +81,13 @@ Route::group(['prefix' => 'pages'], function () {
 
 Route::group(['prefix' => 'upload'], function () {
     //18
-    Route::get('image-upload','uploadController@imageUpload');
+    Route::post('image-upload','uploadController@imageUpload');
 
     //19
     Route::post('post-assets','uploadController@postAssets');
+
+    //20
+    Route::post('delete-assets','uploadController@deleteAssets');
+
 });
 
