@@ -17,7 +17,7 @@ class postsController extends Controller
     public function index()
     {
         // $this->authorize('Full control');
-        $news= posts::orderBy('created_at', 'desc')->get();
+        $news= posts::with('categories')->orderBy('created_at', 'desc')->get();
         return response()->json($news, RESPONSE_STATUS_OK);
     }
     //9
