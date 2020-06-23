@@ -7,6 +7,9 @@ use App\User;
 use Validator;
 use Str;
 
+define('RESPONSE_STATUS_FORBIDDEN', 403);
+define('RESPONSE_STATUS_OK', 200);
+
 class userController extends Controller
 {
     //1
@@ -15,19 +18,18 @@ class userController extends Controller
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8|max:32',
-            // 'role_id' => 'required|numeric',
+            'level' => 'required|numeric',
         ]);
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 403);
+            return response()->json($validator->errors(), RESPONSE_STATUS_FORBIDDEN);
         }
         $user = new User;
         $user->email = $request->email;
         $user->password = $request->password;
-        $user->name = $request->name;
-        // $user->role_id = $request->role_id;
+        $user->level = $request->level;
         $user->api_token = hash_hmac('sha256', Str::random(64), config('app.key'));
         $user->save();
-        return response()->json(['description' => 'Created'], 200);
+        return response()->json(['description' => 'Created'], RESPONSE_STATUS_OK);
     }
     //2
     function login(Request $request)
@@ -37,13 +39,13 @@ class userController extends Controller
             'password' => 'required|min:8|max:32',
         ]);
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 403);
+            return response()->json($validator->errors(), RESPONSE_STATUS_FORBIDDEN);
         }
         
         $user = User::where(['email' => $request->email, 'password' => $request->password])->select('email','api_token')->first();
         if(!$user){
-            return response()->json(['description' => 'login failed'], 403);
+            return response()->json(['description' => 'login failed'], RESPONSE_STATUS_FORBIDDEN);
         }
-        return response()->json(['description' => 'logined', 'data' => $user ],200);
+        return response()->json(['description' => 'logined', 'data' => $user ],RESPONSE_STATUS_OK);
     }
 }
