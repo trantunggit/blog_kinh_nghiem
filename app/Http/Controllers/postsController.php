@@ -16,14 +16,16 @@ class postsController extends Controller
     //8
     public function index()
     {
-        // $this->authorize('Full control');
+        
         $news= posts::with('categories')->orderBy('created_at', 'desc')->get();
         return response()->json($news, RESPONSE_STATUS_OK);
     }
     //9
     public function show($id)
     {
-        return response()->json(posts::find($id), RESPONSE_STATUS_OK);
+        $news = posts::find($id);
+        $news->load('categories');
+        return response()->json($news, RESPONSE_STATUS_OK);
     }
     //10
     function add(Request $request)
