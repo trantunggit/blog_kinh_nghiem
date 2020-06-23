@@ -23,8 +23,7 @@ class postsController extends Controller
     //9
     public function show($id)
     {
-        $news = posts::find($id);
-        $news->load('categories');
+        $news = posts::find($id)->load('categories');
         return response()->json($news, RESPONSE_STATUS_OK);
     }
     //10
